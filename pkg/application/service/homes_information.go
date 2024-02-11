@@ -17,6 +17,7 @@ func newHomesInformation(r *mux.Router) {
 	subRouter := r.PathPrefix("/homes").Subrouter()
 	subRouter.HandleFunc("/test", testHandler).Methods(http.MethodGet)
 	subRouter.HandleFunc("", newPropertyHandler).Methods(http.MethodPost)
+	subRouter.HandleFunc("", getPropertiesHandler).Methods(http.MethodGet)
 
 }
 
@@ -59,6 +60,15 @@ func newPropertyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body := application.NewResponse(fmt.Sprintf("property created with name %v", newProperty.Name), err)
+
+	writeReponse(w, body)
+}
+
+func getPropertiesHandler(w http.ResponseWriter, r *http.Request) {
+
+	properties, err := DBConn.ViewAll()
+
+	body := application.NewResponse(properties, err)
 
 	writeReponse(w, body)
 }
