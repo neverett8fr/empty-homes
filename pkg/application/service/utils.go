@@ -22,7 +22,7 @@ func NewServiceRoutes(r *mux.Router, conn *sql.DB) {
 
 }
 
-func writeReponse(w http.ResponseWriter, r *http.Request, body interface{}) {
+func writeReponse(w http.ResponseWriter, body interface{}) {
 
 	reponseBody, err := json.Marshal(body)
 	if err != nil {
