@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:14.5
+    restart: always
+    environment:
+      - POSTGRES_DB=empty_homes_db
+      - POSTGRES_USER=service
+      - POSTGRES_PASSWORD=123PassID
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/

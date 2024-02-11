@@ -1,0 +1,10 @@
+api-config:
+  host: "0.0.0.0"
+  port: 8080
+db-config:
+  driver: "postgres"
+  host: ${DB_HOST}
+  port: ${DB_PORT}
+  name: empty_homes_db
+  username: service
+  password: ${DB_SERVICE_PASS}
