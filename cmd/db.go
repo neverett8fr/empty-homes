@@ -5,7 +5,15 @@ import (
 	"empty-homes/pkg/config"
 	"fmt"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
+)
+
+const (
+	pathToMigration = "file://db/migrations"
 )
 
 func OpenDB(conf *config.DB) (*sql.DB, error) {
@@ -29,4 +37,27 @@ func OpenDB(conf *config.DB) (*sql.DB, error) {
 	}
 
 	return conn, nil
+}
+
+func MigrateDB(db *sql.DB, driverType string) error {
+
+	driverInstance, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		return fmt.Errorf("error getting driver instance, err %v", err)
+	}
+	m, err := migrate.NewWithDatabaseInstance(
+		pathToMigration,
+		driverType,
+		driverInstance,
+	)
+	if err != nil {
+		return fmt.Errorf("error getting migrations, err %v", err)
+	}
+
+	err = m.Up()
+	if err != nil && err != migrate.ErrNoChange {
+		return fmt.Errorf("error running migrate up, err %v", err)
+	}
+
+	return nil
 }
