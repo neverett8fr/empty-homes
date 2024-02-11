@@ -39,7 +39,13 @@ func (conn *DBConn) ViewAll() ([]Home, error) {
 	var properites []Home
 	for rows.Next() {
 		var property Home
-		if err := rows.Scan(&property.ID, &property.Name); err != nil {
+		if err := rows.Scan(&property.ID, &property.Name,
+			&property.Postcode, &property.Street,
+			&property.Type, &property.Bedrooms,
+			&property.Inhabited, &property.Safe,
+			&property.OwnerName, &property.OwnerContact,
+			&property.DateAdded,
+			&property.DateLastChecked); err != nil {
 			return properites, err
 		}
 		properites = append(properites, property)

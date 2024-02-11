@@ -5,7 +5,7 @@ import (
 )
 
 type Home struct {
-	ID              string    `json:"id"`
+	ID              int       `json:"id"`
 	Name            string    `json:"name"`
 	Postcode        string    `json:"postcode"`
 	Street          string    `json:"street"`
