@@ -41,7 +41,7 @@ func writeReponse(w http.ResponseWriter, body interface{}) {
 func homesObjectToHTML(properties []db.Home) string {
 	out := ""
 	for _, val := range properties {
-		out += fmt.Sprintf("<div><b>%s</b><p>%s</p><p>%s</p><p>%s</p></div>", val.Name,
+		out += fmt.Sprintf("<div class=\"container\"><b>%s</b><p>%s</p><p>%s</p><p>%s</p></div>", val.Name,
 			fmt.Sprintf("Postcode: %s, Street: %s", val.Postcode, val.Street),
 			fmt.Sprintf("Type: %s, Bedrooms: %v, Safe: %v", val.Type, val.Bedrooms, val.Safe),
 			fmt.Sprintf("Date Added: %v, Last Checked: %v", val.DateAdded, val.DateLastChecked))

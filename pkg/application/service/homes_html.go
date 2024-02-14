@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -16,7 +17,9 @@ func newHomesHTML(r *mux.Router) {
 
 func allPropertiesHandler(w http.ResponseWriter, r *http.Request) {
 
-	html := "<html><head></head><body>"
+	style := "<style>.container{border:2px solid black;margin:10px}</style>"
+
+	html := fmt.Sprintf("<html><head>%s</head><body>", style)
 	properties, err := DBConn.ViewAll()
 	if err == nil {
 		html += homesObjectToHTML(properties)
