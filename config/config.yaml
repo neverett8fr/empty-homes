@@ -8,3 +8,5 @@ db-config:
   name: empty_homes_db
   username: service
   password: ${DB_SERVICE_PASS}
+html-config:
+  style-route: "config/html/style.css"

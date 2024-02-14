@@ -2,6 +2,7 @@ package service
 
 import (
 	"empty-homes/pkg/infra/db"
+	"empty-homes/pkg/infra/html"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,10 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+)
+
+const (
+	standardHTML = "<html><head><style></style></head><body>|fn_nav|</body></html>"
 )
 
 func newHomesHTML(r *mux.Router) {
@@ -19,24 +24,13 @@ func newHomesHTML(r *mux.Router) {
 	subRouter.HandleFunc("/add_form", addPropertyFormHandler).Methods(http.MethodGet)
 	subRouter.HandleFunc("/add", addPropertyHandler).Methods(http.MethodGet)
 
+	_ = HTMLProv.AddComponent("/", confHTML.Style, standardHTML, map[string]string{"|fn_nav|": html.NavBody()})
+
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 
-	style := "<style>.container{border:2px solid black;margin:10px}</style>"
-	elements := `
-	Navigate:
-	<div class="container">
-	<ul>
-	<li><a href="all">All properties</a></li>
-	<li><a href="add_form">Add a property</a></li>
-	</ul>
-	</div>
-	`
-
-	html := fmt.Sprintf("<html><head>%s</head><body>%s</body></html>", style, elements)
-
-	_, err := w.Write([]byte(html))
+	_, err := w.Write([]byte(HTMLProv.WebComponents["/"].Compile()))
 	if err != nil {
 		log.Printf("error writing response, err %v", err)
 	}

@@ -17,6 +17,11 @@ type Service struct {
 	Port int    `yaml:"port"`
 }
 
+type HTML struct {
+	StyleRoute string `yaml:"style-route"`
+	Style      string
+}
+
 type DB struct {
 	Driver   string `yaml:"driver"`
 	Username string `yaml:"username"`
@@ -29,6 +34,7 @@ type DB struct {
 type Config struct {
 	Service Service `yaml:"api-config"`
 	DB      DB      `yaml:"db-config"`
+	HTML    HTML    `yaml:"html-config"`
 }
 
 func Initialise() (*Config, error) {
@@ -45,6 +51,12 @@ func Initialise() (*Config, error) {
 	if err != nil {
 		return &Config{}, fmt.Errorf("issue unmarshalling config yaml, err %v", err)
 	}
+
+	styleFile, err := ioutil.ReadFile(conf.HTML.StyleRoute)
+	if err != nil {
+		return &conf, fmt.Errorf("issue finding style file, err %v", err)
+	}
+	conf.HTML.Style = string(styleFile)
 
 	return &conf, nil
 }

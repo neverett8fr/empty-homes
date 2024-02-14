@@ -2,7 +2,9 @@ package service
 
 import (
 	"database/sql"
+	"empty-homes/pkg/config"
 	"empty-homes/pkg/infra/db"
+	"empty-homes/pkg/infra/html"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -12,12 +14,17 @@ import (
 )
 
 var (
-	DBConn *db.DBConn
+	DBConn   *db.DBConn
+	HTMLProv *html.HTMLProvider
+	confHTML *config.HTML
 )
 
-func NewServiceRoutes(r *mux.Router, conn *sql.DB) {
+func NewServiceRoutes(r *mux.Router, conn *sql.DB, conf *config.HTML) {
 
 	DBConn = db.NewDBConnFromExisting(conn)
+	HTMLProv, _ = html.InitialiseProvider()
+
+	confHTML = conf
 
 	newHomesInformation(r)
 	newHomesHTML(r)
