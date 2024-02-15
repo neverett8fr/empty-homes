@@ -17,7 +17,7 @@ func (wc *Web) Compile() string {
 
 	// for each component
 	for key, val := range wc.Components {
-		ht = strings.ReplaceAll(wc.HTML, key, val)
+		ht = strings.ReplaceAll(ht, key, val)
 	}
 
 	return ht
