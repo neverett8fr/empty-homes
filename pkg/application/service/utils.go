@@ -6,7 +6,6 @@ import (
 	"empty-homes/pkg/infra/db"
 	"empty-homes/pkg/infra/html"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -43,16 +42,4 @@ func writeReponse(w http.ResponseWriter, body interface{}) {
 	if err != nil {
 		log.Printf("error writing response, err %v", err)
 	}
-}
-
-func homesObjectToHTML(properties []db.Home) string {
-	out := ""
-	for _, val := range properties {
-		out += fmt.Sprintf("<div class=\"container\"><b>%s</b><p>%s</p><p>%s</p><p>%s</p></div>", val.Name,
-			fmt.Sprintf("Postcode: %s, Street: %s", val.Postcode, val.Street),
-			fmt.Sprintf("Type: %s, Bedrooms: %v, Safe: %v", val.Type, val.Bedrooms, val.Safe),
-			fmt.Sprintf("Date Added: %v, Last Checked: %v", val.DateAdded, val.DateLastChecked))
-	}
-
-	return out
 }

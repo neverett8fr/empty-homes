@@ -1,5 +1,27 @@
 package html
 
+import (
+	"empty-homes/pkg/infra/db"
+	"fmt"
+)
+
+func homesObjectToHTML(properties []db.Home) string {
+	out := ""
+	for _, val := range properties {
+		out += fmt.Sprintf("<div class=\"container\"><b>%s</b><p>%s</p><p>%s</p><p>%s</p></div>", val.Name,
+			fmt.Sprintf("Postcode: %s, Street: %s", val.Postcode, val.Street),
+			fmt.Sprintf("Type: %s, Bedrooms: %v, Safe: %v", val.Type, val.Bedrooms, val.Safe),
+			fmt.Sprintf("Date Added: %v, Last Checked: %v", val.DateAdded, val.DateLastChecked))
+	}
+
+	return out
+}
+
+func AllPropertiesBody(properties []db.Home) string {
+
+	return fmt.Sprintf("<div>%s</div>", homesObjectToHTML(properties))
+}
+
 func NavBody() string {
 
 	return `

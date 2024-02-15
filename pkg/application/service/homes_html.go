@@ -29,6 +29,10 @@ func newHomesHTML(r *mux.Router) {
 	_ = HTMLProv.AddComponent("/add_form", confHTML.Style, fmt.Sprintf(standardHTML, "|fn_add_form|"),
 		map[string]string{"|fn_nav|": html.NavBody(), "|fn_add_form|": html.PropertyFormBody()})
 
+	prop, _ := DBConn.ViewAll() // this is only compiled at start, and not on change
+	_ = HTMLProv.AddComponent("/all", confHTML.Style, fmt.Sprintf(standardHTML, "|fn_all|"),
+		map[string]string{"|fn_nav|": html.NavBody(), "|fn_all|": html.AllPropertiesBody(prop)})
+
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -63,6 +67,7 @@ func addPropertyHandler(w http.ResponseWriter, r *http.Request) {
 	bR, err := strconv.Atoi(bedrooms)
 	if err != nil {
 		log.Printf("error converting type, err %v", err)
+		bR = 0
 	}
 	in := false
 	if inhabited != "" {
@@ -93,19 +98,7 @@ func addPropertyHandler(w http.ResponseWriter, r *http.Request) {
 
 func allPropertiesHandler(w http.ResponseWriter, r *http.Request) {
 
-	style := "<style>.container{border:2px solid black;margin:10px}</style>"
-
-	html := fmt.Sprintf("<html><head>%s</head><body>", style)
-	properties, err := DBConn.ViewAll()
-	if err == nil {
-		html += homesObjectToHTML(properties)
-	} else {
-		html += "<div> there has been an error </div>"
-	}
-
-	html += "</body></html>"
-
-	_, err = w.Write([]byte(html))
+	_, err := w.Write([]byte(HTMLProv.WebComponents["/all"].Compile()))
 	if err != nil {
 		log.Printf("error writing response, err %v", err)
 	}
